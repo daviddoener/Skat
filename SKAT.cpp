@@ -115,7 +115,9 @@ static std::vector<Spielkarte> mischen_und_printen(){
     std::vector<Spielkarte> kartenstapel = Spielkarte::karten_generieren();
 
     // Stapel shuffeln
-    auto rng = std::default_random_engine {};
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+    auto rng = std::default_random_engine(seed);
     std::shuffle(std::begin(kartenstapel), std::end(kartenstapel), rng);
 
     // Ausgeben des gemischten Blatts im Terminal
@@ -187,35 +189,70 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
 
     //Spiellogik
     int karten_pick;
-    int Trumpf = 1;                  // 1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen
+    int gespielte_farbe = 1;                  // 1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen
+    int trumpf = 1;
 
+    std::cout << "Spieler 1: Wähle den Trumpf aus (Gebe eine Zahl zwischen 1 und 4 ein?)(1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen)" << endl;
+    std::cin >> trumpf;
+    switch (trumpf) {
+        case 1:
+        std::cout << "Eicheln ist Trumpf" << endl; break;
+        case 2: 
+        std::cout << "Grün ist Trumpf" << endl; break;
+        case 3: 
+        std::cout << "Rot ist Trumpf" << endl; break;
+        case 4: 
+        std::cout << "Schellen ist Trumpf" << endl; break;
+    }
     
-    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und 10 ein)" << endl;
+
+    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler1.size() <<" ein)" << endl;
     std::cin >> karten_pick;
     unsigned int auswaehler = karten_pick -1;
 
     tischmitte.push_back(spieler1.at(auswaehler));
     spieler1.erase(spieler1.begin() + auswaehler);
 
-
-    if (tischmitte[0].getFarbe() == "Grün" ){
-        
-    }
     //std::cout << auswaehler;
     switch (find(farben.begin(), farben.end(), tischmitte[0].getFarbe()) - farben.begin()) {
-        case 0: Trumpf = 1;  // Eicheln
-        std::cout << " Eicheln ist Trumpf" << endl; break;
-        case 1: Trumpf = 2; // Grün
-        std::cout << " Grün ist Trumpf" << endl; break;
-        case 2: Trumpf = 3; // Rot
-        std::cout << " Rot ist Trumpf" << endl; break;
-        case 3: Trumpf = 4; // Schellen
-        std::cout << " Schellen ist Trumpf" << endl; break;
+        case 0: gespielte_farbe = 1;  // Eicheln
+        std::cout << "Eicheln ist die gespielte Farbe" << endl; break;
+        case 1: gespielte_farbe = 2; // Grün
+        std::cout << "Grün ist die gespielte Farbe" << endl; break;
+        case 2: gespielte_farbe = 3; // Rot
+        std::cout << "Rot ist die gespielte Farbe" << endl; break;
+        case 3: gespielte_farbe = 4; // Schellen
+        std::cout << "Schellen ist die gespielte Farbe" << endl; break;
     }
 
+    std::cout << "Auf dem Tisch liegt " << endl;
+    std::cout << tischmitte[0].toString() << endl;
+    std::cout << "Spieler 2 ist an der Reihe" << endl;
 
 
+    int karten_pick2;
+    auswaehler = karten_pick2 -1;
+    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler1.size() <<" ein)" << endl;
+    std::cin >> karten_pick2;
+    tischmitte.push_back(spieler2.at(auswaehler));
+    spieler2.erase(spieler2.begin() + auswaehler);
 
+    std::cout << "Auf dem Tisch liegt " << endl;
+    std::cout << tischmitte[0].toString() << endl;
+    std::cout << tischmitte[1].toString() << endl;
+    std::cout << "Spieler 3 ist an der Reihe" << endl;
+
+    int karten_pick3;
+    auswaehler = karten_pick3 -1;
+    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler1.size() <<" ein)" << endl;
+    std::cin >> karten_pick3;
+    tischmitte.push_back(spieler2.at(auswaehler));
+    spieler3.erase(spieler3.begin() + auswaehler);
+
+    std::cout << "Auf dem Tisch liegt " << endl;
+    std::cout << tischmitte[0].toString() << endl;
+    std::cout << tischmitte[1].toString() << endl;
+    std::cout << tischmitte[2].toString() << endl;
 
 }
 
