@@ -65,7 +65,7 @@ public:
     std::cout << "\033[2J\033[H";
     }
 
-    std::string getFarbe() {
+    std::string getFarbe() const {
         return farbe;
     }
     
@@ -99,6 +99,8 @@ static std::vector<Spielkarte> karten_generieren()
     }
 
 
+
+
 };
 
 void losgehts()
@@ -109,6 +111,9 @@ void losgehts()
 
 
 }
+
+
+
 
 static std::vector<Spielkarte> mischen_und_printen(){
 
@@ -131,10 +136,19 @@ static std::vector<Spielkarte> mischen_und_printen(){
     return kartenstapel;
 };  
 
+bool hat_farbe(const std::vector<Spielkarte>& karten, const std::string& gespielte_farbe) {
+    for (int i = 0; i < karten.size(); i++) {
+        if (karten[i].getFarbe() == gespielte_farbe) {
+            return true; // Sobald eine Karte mit der Farbe gefunden wurde, direkt beenden
+        } 
+    }
+    return false;
+}
+
+
 static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     
     // Es werden drei leere Vektoren erstellt
-    int anzahl_spieler = 3;
     int karten_pro_spieler = 10; 
     std::vector<Spielkarte> spieler1;
     std::vector<Spielkarte> spieler2;
@@ -189,7 +203,7 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
 
     //Spiellogik
     int karten_pick;
-    int gespielte_farbe = 1;                  // 1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen
+    std::string gespielte_farbe = "Eichel";                  // 1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen
     int trumpf = 1;
 
     std::cout << "Spieler 1: Wähle den Trumpf aus (Gebe eine Zahl zwischen 1 und 4 ein?)(1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen)" << endl;
@@ -210,18 +224,19 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     std::cin >> karten_pick;
     unsigned int auswaehler = karten_pick -1;
 
+    
     tischmitte.push_back(spieler1.at(auswaehler));
     spieler1.erase(spieler1.begin() + auswaehler);
 
     //std::cout << auswaehler;
     switch (find(farben.begin(), farben.end(), tischmitte[0].getFarbe()) - farben.begin()) {
-        case 0: gespielte_farbe = 1;  // Eicheln
+        case 0: gespielte_farbe = "Eichel";  // Eicheln
         std::cout << "Eicheln ist die gespielte Farbe" << endl; break;
-        case 1: gespielte_farbe = 2; // Grün
+        case 1: gespielte_farbe = "Grün"; // Grün
         std::cout << "Grün ist die gespielte Farbe" << endl; break;
-        case 2: gespielte_farbe = 3; // Rot
+        case 2: gespielte_farbe = "Rot"; // Rot
         std::cout << "Rot ist die gespielte Farbe" << endl; break;
-        case 3: gespielte_farbe = 4; // Schellen
+        case 3: gespielte_farbe = "Schellen"; // Schellen
         std::cout << "Schellen ist die gespielte Farbe" << endl; break;
     }
 
@@ -229,11 +244,23 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     std::cout << tischmitte[0].toString() << endl;
     std::cout << "Spieler 2 ist an der Reihe" << endl;
 
+    if (hat_farbe(spieler2,gespielte_farbe) == true){
+        std::cout << "Spieler 2 muss " << gespielte_farbe << " bedienen" << endl;
+    }    
 
     int karten_pick2;
     auswaehler = karten_pick2 -1;
-    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler1.size() <<" ein)" << endl;
+    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler2.size() <<" ein)" << endl;
     std::cin >> karten_pick2;
+
+
+    std::cout << ((spieler2.at(auswaehler)).getFarbe()) << endl; //gibt die Farbe der gespielten Farbe aus
+
+
+    //if (spieler2.at(auswaehler)).getFarbe != spieler1{
+    //    std::cout << "Diese Karte ist ungültig" << endl;
+    //}
+
     tischmitte.push_back(spieler2.at(auswaehler));
     spieler2.erase(spieler2.begin() + auswaehler);
 
@@ -244,7 +271,7 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
 
     int karten_pick3;
     auswaehler = karten_pick3 -1;
-    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler1.size() <<" ein)" << endl;
+    std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler3.size() <<" ein)" << endl;
     std::cin >> karten_pick3;
     tischmitte.push_back(spieler2.at(auswaehler));
     spieler3.erase(spieler3.begin() + auswaehler);
