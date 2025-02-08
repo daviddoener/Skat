@@ -338,24 +338,18 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     std::cout << tischmitte[1].toString() << endl;
     std::cout << tischmitte[2].toString() << endl;
     
-
-    
-}
-
-int bestimme_stichgewinner(const std::vector<Spielkarte>& tischmitte, const std::string& trumpf){
     int gewinner = 1; //Spielerindex des gewinners (1 = Spieler 1, 2 = Spieler 2, 3 = Spieler 3), wird erstmal auf 1 gesetzt aber später im Programm noch geändert
-    std::string gespielte_farbe = tischmitte[0].getFarbe(); //nochmal neu den string definieren, dass die gespielte Farbe, die Farbe der ersten gelegten Karte ist. 
     bool trumpf_gespielt = false;
 
     for (int i = 0; i < 3; i++) {
-        if (tischmitte[i].getFarbe() == trumpf) {
+        if (tischmitte[i].getFarbe() == st_trumpf) {
             trumpf_gespielt = true;
         }
     }
 
     if (trumpf_gespielt) {
-        for (int i = 1; i < 3; i++) {
-            if (tischmitte[i].getFarbe() == trumpf &&
+        for (int i = 0; i < 3; i++) {
+            if (tischmitte[i].getFarbe() == st_trumpf &&
                 tischmitte[i].getAugen() > tischmitte[gewinner].getAugen()) {
                 gewinner = i;
             }
@@ -363,7 +357,7 @@ int bestimme_stichgewinner(const std::vector<Spielkarte>& tischmitte, const std:
     } 
 
     else {
-        for (int i = 1; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             if (tischmitte[i].getFarbe() == gespielte_farbe &&
                 tischmitte[i].getAugen() > tischmitte[gewinner].getAugen()) {
                 gewinner = i;
@@ -371,10 +365,12 @@ int bestimme_stichgewinner(const std::vector<Spielkarte>& tischmitte, const std:
         }
     }
 
-    return gewinner;
 
-    std::cout << "Den Stich gewinnt diese Karte" << tischmitte[gewinner].toString() << endl;
+
+    std::cout << "Den Stich gewinnt diese Karte: " << tischmitte[gewinner].toString() << endl;
+    
 }
+
 
 
 
