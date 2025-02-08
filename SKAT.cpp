@@ -77,6 +77,9 @@ public:
     int getAugen() const {
         return augen;
     }
+    //int getPrio() const {
+    //    return prioritaet;
+    //}
 
     //Eine Funktion definieren die alle Karten eines Skatblatts generiert
 static std::vector<Spielkarte> karten_generieren()
@@ -116,7 +119,7 @@ void losgehts()
 // Wenn bei einer Nutzereingabe "1234321" eingegeben wird, wird das Spiel abgebrochen.
 static void check_exit(const int eingabe) {
     if (eingabe == 1234321) {
-        std::cout << "Spiel wird beendet..." << std::endl;
+        std::cout << "Spiel wird beendet..." << endl;
         exit(0);  // Beendet das Programm sofort
     }
 }
@@ -154,19 +157,19 @@ bool hat_farbe(const std::vector<Spielkarte>& karten, const std::string& gespiel
     return false;
 }
 
+std::vector<Spielkarte> spieler1;
+std::vector<Spielkarte> spieler2;
+std::vector<Spielkarte> spieler3;
+std::vector<Spielkarte> tischmitte;
+std::vector<Spielkarte> ablagestapel_1;
+std::vector<Spielkarte> ablagestapel_2;
+std::vector<Spielkarte> ablagestapel_3;
+std::vector<Spielkarte> skat;
 
-static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
-    
-    // Es werden drei leere Vektoren erstellt
+static void karten_austeilen(std::vector<Spielkarte>& kartenstapel,std::vector<Spielkarte>& spieler1,std::vector<Spielkarte>& spieler2,std::vector<Spielkarte>& spieler3){
+    // Es werden viele leere Vektoren erstellt, Hand der Spieler, Ablagestapel der Spieler, Tischmitte
     int karten_pro_spieler = 10; 
-    std::vector<Spielkarte> spieler1;
-    std::vector<Spielkarte> spieler2;
-    std::vector<Spielkarte> spieler3;
-    std::vector<Spielkarte> tischmitte;
-    std::vector<Spielkarte> ablagestapel_1;
-    std::vector<Spielkarte> ablagestapel_2;
-    std::vector<Spielkarte> ablagestapel_3;
-    std::vector<Spielkarte> skat;
+
 
     //Die Karten werden ausgeteilt;
     for (int i = 0; i < karten_pro_spieler; i++)
@@ -180,6 +183,19 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
         kartenstapel.pop_back();
     }
     skat = kartenstapel;
+
+}
+static void runde_spielen(std::vector<Spielkarte>& kartenstapel,
+                            std::vector<Spielkarte>& spieler1,
+                            std::vector<Spielkarte>& spieler2, 
+                            std::vector<Spielkarte>& spieler3, 
+                            std::vector<Spielkarte>& tischmitte, 
+                            std::vector<Spielkarte>& ablagestapel_1, 
+                            std::vector<Spielkarte>& ablagestapel_2, 
+                            std::vector<Spielkarte>& ablagestapel_3, 
+                            int aktuelle_runde, int& gewinner){
+    
+
 
     std::cout << "Spieler 1 beginnt: " << endl;
     std::cout << "Hier das Blatt von Spieler 1 " << endl;
@@ -212,16 +228,22 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
             
         }
 
+    std::cout << endl;
+
+
     //Spiellogik
     int karten_pick;
-    std::string gespielte_farbe = "Eichel";                  // 1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen
-    int trumpf = 1;
+    
     std::string st_trumpf = "Eicheln";
+    
+    if (aktuelle_runde == 0){
+        int trumpf = 1;
+        std::string st_trumpf = "Eicheln";
 
-    std::cout << "Spieler 1: Wähle den Trumpf aus (Gebe eine Zahl zwischen 1 und 4 ein?)(1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen)" << endl;
-    std::cin >> trumpf;
-    check_exit(trumpf); 
-    switch (trumpf) {
+        std::cout << "Spieler 1: Wähle den Trumpf aus (Gebe eine Zahl zwischen 1 und 4 ein?)(1 = Eichel, 2 = Grün, 3 = Rot, 4 = Schellen)" << endl;
+        std::cin >> trumpf;
+        check_exit(trumpf); 
+        switch (trumpf) {
         case 1:
         std::cout << "Eicheln ist Trumpf" << endl; 
         st_trumpf = "Eicheln"; break;
@@ -235,7 +257,11 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
         std::cout << "Schellen ist Trumpf" << endl;
         st_trumpf = "Schellen"; break;
     }
-    
+    }
+    if (aktuelle_runde != 0){
+    std::cout << "Der Trumpf ist immer noch " << st_trumpf << endl;
+
+    }
 
     std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler1.size() <<" ein)" << endl;
     std::cin >> karten_pick;
@@ -246,25 +272,24 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     tischmitte.push_back(spieler1.at(auswaehler));
     spieler1.erase(spieler1.begin() + auswaehler);
 
-    //std::cout << auswaehler;
-    switch (find(farben.begin(), farben.end(), tischmitte[0].getFarbe()) - farben.begin()) {
-        case 0: gespielte_farbe = "Eichel";  // Eicheln
-        std::cout << "Eicheln ist die gespielte Farbe" << endl; break;
-        case 1: gespielte_farbe = "Grün"; // Grün
-        std::cout << "Grün ist die gespielte Farbe" << endl; break;
-        case 2: gespielte_farbe = "Rot"; // Rot
-        std::cout << "Rot ist die gespielte Farbe" << endl; break;
-        case 3: gespielte_farbe = "Schellen"; // Schellen
-        std::cout << "Schellen ist die gespielte Farbe" << endl; break;
-    }
+
+    std::string gespielte_farbe = tischmitte[0].getFarbe();
+
+    std::cout << "Gespielte Farbe: " << gespielte_farbe << endl;
 
     std::cout << "Auf dem Tisch liegt " << endl;
     std::cout << tischmitte[0].toString() << endl;
     std::cout << "Spieler 2 ist an der Reihe" << endl;
 
+    bool kann_alles_spielen = false;
+
     if (hat_farbe(spieler2,gespielte_farbe) == true){
         std::cout << "Spieler 2 muss " << gespielte_farbe << " bedienen" << endl;
-    }    
+    }
+    else {
+        std::cout << "Spieler 2 kann nicht bedienen." << endl;
+        kann_alles_spielen = true;
+    }
 
     int karten_pick2;
     std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler2.size() <<" ein)" << endl;
@@ -273,11 +298,11 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     auswaehler = karten_pick2 -1;
 
 
-    std::cout << ((spieler2.at(auswaehler)).getFarbe()) << endl; //gibt die Farbe der gespielten Farbe aus
+    // std::cout << ((spieler2.at(auswaehler)).getFarbe()) << endl; //gibt die Farbe der gespielten Farbe aus
 
     
-    bool weitermachen = true;
-    if ((spieler2.at(auswaehler)).getFarbe() != gespielte_farbe){
+    bool weitermachen;
+    if ((spieler2.at(auswaehler)).getFarbe() != gespielte_farbe && kann_alles_spielen == false){
         std::cout << "Diese Karte ist ungültig" << endl;
         weitermachen = false;
     }
@@ -286,7 +311,7 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     
     
     while (weitermachen == false){
-            std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler2.size() <<" ein)" << endl;
+        std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler2.size() <<" ein)" << endl;
         std::cin >> karten_pick2;
         check_exit(karten_pick2); 
         auswaehler = karten_pick2 -1;
@@ -304,6 +329,15 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     std::cout << tischmitte[1].toString() << endl;
     std::cout << "Spieler 3 ist an der Reihe" << endl;
 
+    kann_alles_spielen = false;
+    if (hat_farbe(spieler3,gespielte_farbe) == true){
+        std::cout << "Spieler 3 muss " << gespielte_farbe << " bedienen" << endl;
+    }
+    else {
+        std::cout << "Spieler 3 kann nicht bedienen." << endl;
+        kann_alles_spielen = true;
+    }
+
     int karten_pick3;
     std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler3.size() <<" ein)" << endl;
     std::cin >> karten_pick3;
@@ -311,7 +345,7 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     auswaehler = karten_pick3 -1;
 
     bool weitermachen2 = true;
-    if ((spieler3.at(auswaehler)).getFarbe() != gespielte_farbe){
+    if (((spieler3.at(auswaehler)).getFarbe() != gespielte_farbe) && (kann_alles_spielen == false)){
         std::cout << "Diese Karte ist ungültig" << endl;
         weitermachen2 = false;
     }
@@ -330,6 +364,7 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
 
     }
 
+    kann_alles_spielen = false;
     tischmitte.push_back(spieler3.at(auswaehler));
     spieler3.erase(spieler3.begin() + auswaehler);
 
@@ -338,7 +373,7 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
     std::cout << tischmitte[1].toString() << endl;
     std::cout << tischmitte[2].toString() << endl;
     
-    int gewinner = 1; //Spielerindex des gewinners (1 = Spieler 1, 2 = Spieler 2, 3 = Spieler 3), wird erstmal auf 1 gesetzt aber später im Programm noch geändert
+    gewinner = 1; //Spielerindex des gewinners (1 = Spieler 1, 2 = Spieler 2, 3 = Spieler 3), wird erstmal auf 1 gesetzt aber später im Programm noch geändert
     bool trumpf_gespielt = false;
 
     for (int i = 0; i < 3; i++) {
@@ -365,10 +400,80 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
         }
     }
 
-
-
     std::cout << "Den Stich gewinnt diese Karte: " << tischmitte[gewinner].toString() << endl;
     
+    //hier werden die Karte in der Tischmitte dem Ablagestapel des gewinners zugeschoben
+    switch (gewinner)
+    {
+    case 0:
+        for (int i = 0; i < 3; i++) {
+        ablagestapel_1.push_back(tischmitte[i]);
+        };
+        break;
+    case 1:
+        for (int i = 0; i < 3; i++) {
+        ablagestapel_2.push_back(tischmitte[i]);
+        };
+        break;
+    case 2:
+        for (int i = 0; i < 3; i++) {
+        ablagestapel_3.push_back(tischmitte[i]);
+        };
+        break;
+    }
+    tischmitte.clear(); //Die Tischmitte wird wieder geleert.
+    
+    
+}
+
+void punkte_auswerten(const std::vector<Spielkarte>& ablagestapel_1, 
+    const std::vector<Spielkarte>& ablagestapel_2, 
+    const std::vector<Spielkarte>& ablagestapel_3, 
+    const std::vector<Spielkarte>& skat, 
+    int& gewinner) 
+{
+int punkte_spieler1 = 0, punkte_spieler2 = 0, punkte_spieler3 = 0;
+
+// Punkte berechnen
+for (int i = 0; i < ablagestapel_1.size(); i++) {
+punkte_spieler1 += ablagestapel_1[i].getAugen();
+}
+for (int i = 0; i < ablagestapel_2.size(); i++) {
+punkte_spieler2 += ablagestapel_2[i].getAugen();
+}
+for (int i = 0; i < ablagestapel_3.size(); i++) {
+punkte_spieler3 += ablagestapel_3[i].getAugen();
+}
+
+//Der Gewinner des letzten Stichs bekommt den Skat dazu
+std::cout << "\n--- Der Skat geht an Spieler " << (gewinner + 1) << " ---\n";
+for (int i = 0; i < skat.size(); i++) {
+std::cout << skat[i].toString() << endl;
+}
+
+// Skat-Punkte zum Gewinner hinzufügen
+for (const auto& karte : skat) {
+if (gewinner == 0) punkte_spieler1 += karte.getAugen();
+if (gewinner == 1) punkte_spieler2 += karte.getAugen();
+if (gewinner == 2) punkte_spieler3 += karte.getAugen();
+}
+
+// Punkte ausgeben
+std::cout << "--- Endergebnis ---";
+std::cout << "Spieler 1 hat " << punkte_spieler1 << " Punkte." << endl;
+std::cout << "Spieler 2 hat " << punkte_spieler2 << " Punkte." << endl;
+std::cout << "Spieler 3 hat " << punkte_spieler3 << " Punkte." << endl;
+
+// Gewinner bestimmen
+if (punkte_spieler1 > punkte_spieler2 && punkte_spieler1 > punkte_spieler3) {
+std::cout << "🎉 Spieler 1 hat gewonnen!" << endl;
+} else if (punkte_spieler2 > punkte_spieler1 && punkte_spieler2 > punkte_spieler3) {
+std::cout << "🎉 Spieler 2 hat gewonnen!" << endl;
+} else if (punkte_spieler3 > punkte_spieler1 && punkte_spieler3 > punkte_spieler2) {
+std::cout << "🎉 Spieler 3 hat gewonnen!" << endl;
+} else {
+std::cout << "🤝 Unentschieden!" << endl;
+}
 }
 
 
@@ -378,9 +483,19 @@ static void karten_austeilen(std::vector<Spielkarte> kartenstapel){
 int main ()
 {
 //    sprache_waehlen();
-    std::vector<Spielkarte> stapel = mischen_und_printen();
-    karten_austeilen(stapel);
-    //runde_spielen;
+
+    std::vector<Spielkarte> kartenstapel = mischen_und_printen();
+    int aktuelle_runde = 0; 
+    int max_runden = 10;  // Anzahl der maximalen Runden
+    int gewinner = 0;
+    karten_austeilen(kartenstapel, spieler1, spieler2, spieler3);
+    while (aktuelle_runde < max_runden){
+        std::cout << "\n--- Runde " << (aktuelle_runde + 1) << " beginnt! ---\n" << endl;
+        runde_spielen(kartenstapel, spieler1, spieler2, spieler3, tischmitte, ablagestapel_1, ablagestapel_2, ablagestapel_3,aktuelle_runde, gewinner);
+        aktuelle_runde++;
+    }
+    punkte_auswerten(ablagestapel_1, ablagestapel_2, ablagestapel_3, skat, gewinner);
+
     return 0;
 }
 
