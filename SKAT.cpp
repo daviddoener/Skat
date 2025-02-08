@@ -471,6 +471,7 @@ std::cout << "🎉 Spieler 1 hat gewonnen!" << endl;
 std::cout << "🎉 Spieler 2 hat gewonnen!" << endl;
 } else if (punkte_spieler3 > punkte_spieler1 && punkte_spieler3 > punkte_spieler2) {
 std::cout << "🎉 Spieler 3 hat gewonnen!" << endl;
+std::cout << "wuuuup wuuuupppp wupppppp" << endl;
 } else {
 std::cout << "🤝 Unentschieden!" << endl;
 }
