@@ -240,6 +240,7 @@ static void karten_waehlen(std::vector<Spielkarte>& kartenstapel,               
     
     while (weitermachen == false){
         std::cout << "Welche Karte möchtest du spielen (Gebe eine Zahl zwischen 1 und "<< spieler2.size() <<" ein)" << endl;   
+        std::cin >> karten_pick2;
         check_exit(karten_pick2); 
         auswaehler = karten_pick2 -1;
         if ((spieler2.at(auswaehler)).getFarbe() == gespielte_farbe){
@@ -305,8 +306,6 @@ static void karten_waehlen(std::vector<Spielkarte>& kartenstapel,               
     gewinner = 0; //Spielerindex des gewinners (0 = Spieler 1, 1 = Spieler 2, 2 = Spieler 3), wird erstmal auf -1 gesetzt aber später im Programm noch geändert
     bool trumpf_gespielt = false;
 
-    for (int i = 0; i < 3; i++) {
-    }
 
     if (trumpf_gespielt) {                                                                                                          // Wenn ein Trumpf liegt dann muss die Karte in Mitte                  
         for (int i = 0; i < 3; i++) {
