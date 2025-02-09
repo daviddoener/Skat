@@ -1,26 +1,17 @@
 #include <iostream> 
 #include <algorithm>
-#include <random> // std :: default_random_engine
-#include <chrono> // std :: chrono :: system_clock
+#include <chrono> // für bessere Zufallsberechnung
 #include <vector>
+#include <random>
 #include "Spielkarte.hpp" // Inkludiert meine Header-Datei
 #include "Eigenschaften.hpp"
 
 using std::endl;
 using namespace std;
 
-//Line zum Kompilen fürs Terminal "g++ -std=c++23 -Wall ./SKAT.cpp -o ./skat  && ./skat"
-
-
 std::string spieler1_name;                                                                                                      // Außerhalb der Funktion deklariert damit andere Funktionen einfacher darauf zugreifen können
 std::string spieler2_name;
 std::string spieler3_name;
-
-//Die Klasse Spielkarte wird definiert
-
-
-
-
 
 std::vector<Spielkarte> spieler1;
 std::vector<Spielkarte> spieler2;
@@ -31,7 +22,15 @@ std::vector<Spielkarte> ablagestapel_2;
 std::vector<Spielkarte> ablagestapel_3;
 std::vector<Spielkarte> skat;
 
-void losgehts()
+// Wenn bei einer Nutzereingabe "1234321" eingegeben wird, wird das Spiel abgebrochen.
+static void check_exit(const unsigned int eingabe) {
+    if (eingabe == 1234321) {
+        std::cout << "Spiel wird beendet..." << endl;
+        exit(0);  // Beendet das Programm sofort
+    }
+}
+
+static void losgehts()
 {
 
     std::cout << "+++ SKAT +++" << endl;
@@ -41,17 +40,10 @@ void losgehts()
     std::cin >> spieler2_name;
     std::cout << "Bitte Name von Spieler 3 eingeben:" << endl;
     std::cin >> spieler3_name;
-
 }
 
 
-// Wenn bei einer Nutzereingabe "1234321" eingegeben wird, wird das Spiel abgebrochen.
-static void check_exit(const int eingabe) {
-    if (eingabe == 1234321) {
-        std::cout << "Spiel wird beendet..." << endl;
-        exit(0);  // Beendet das Programm sofort
-    }
-}
+
 
 
 
@@ -80,7 +72,7 @@ static std::vector<Spielkarte> mischen_und_printen(){
 bool hat_farbe(const std::vector<Spielkarte>& karten, const std::string& gespielte_farbe) {
     for (int i = 0; i < karten.size(); i++) {
         if (karten[i].getFarbe() == gespielte_farbe) {
-            return true;                                                                    // Sobald eine Karte mit der Farbe gefunden wurde, direkt beenden
+            return true;                                                                                                            // Sobald eine Karte mit der Farbe gefunden wurde, direkt beenden
         } 
     }
     return false;
@@ -93,7 +85,7 @@ static void karten_austeilen(std::vector<Spielkarte>& kartenstapel,std::vector<S
 
 
     //Die Karten werden ausgeteilt;
-    for (int i = 0; i < karten_pro_spieler; i++)
+    for (unsigned int i = 0; i < karten_pro_spieler; i++)
     {
         //Die letzte Karte vom Stapel wird zum Vektor des Spielers kopiert und dann vom Vektor des Stapels gelöscht
         spieler1.push_back(kartenstapel.back());
@@ -115,7 +107,7 @@ static void blatt_ausgeben(){
     std::cout << endl;
 
 
-    for (int i = 0; i < spieler1.size(); i++)
+    for (unsigned int i = 0; i < spieler1.size(); i++)
         {
             std::cout << spieler1[i].toString() << endl;
             
@@ -125,7 +117,7 @@ static void blatt_ausgeben(){
     std::cout << endl;
 
 
-    for (int i = 0; i < spieler2.size(); i++)
+    for (unsigned int i = 0; i < spieler2.size(); i++)
         {
             std::cout << spieler2[i].toString() << endl;
             
@@ -135,7 +127,7 @@ static void blatt_ausgeben(){
     std::cout << endl;
 
 
-    for (int i = 0; i < spieler3.size(); i++)
+    for (unsigned int i = 0; i < spieler3.size(); i++)
         {
             std::cout << spieler3[i].toString() << endl;
             
@@ -308,7 +300,7 @@ static void karten_waehlen(std::vector<Spielkarte>& kartenstapel,               
 
 
     if (trumpf_gespielt) {                                                                                                          // Wenn ein Trumpf liegt dann muss die Karte in Mitte                  
-        for (int i = 0; i < 3; i++) {
+        for (unsigned int i = 0; i < 3; i++) {
             if (tischmitte[i].getFarbe() == st_trumpf && tischmitte[i].getAugen() > tischmitte[gewinner].getAugen()) {              // Prüft mit einer Schleife ob die aktuell angeschaute Karte Trumpf ist und einen höheren Augenwert hat als die bisherige Gewinner Karte
                 gewinner = i;                                                                                                       // Als erstes wird gewinner auf 0 gesetzt aber verändert falls eine andere Karte der Gewinner ist
             }
@@ -316,7 +308,7 @@ static void karten_waehlen(std::vector<Spielkarte>& kartenstapel,               
     } 
 
     else {
-        for (int i = 0; i < 3; i++) {
+        for (unsigned int i = 0; i < 3; i++) {
             if (tischmitte[i].getFarbe() == gespielte_farbe && tischmitte[i].getAugen() > tischmitte[gewinner].getAugen()) {        // Falls kein Trumpf in der Tischmitte liegt so gewinnt die Karte mit dem höchsten Augenwert, welche zur gespielten Farbe gehört
                 gewinner = i;                                                                                                       // "Abgeworfene" Karten werden so nicht gezählt
             }
@@ -331,23 +323,22 @@ static void karten_waehlen(std::vector<Spielkarte>& kartenstapel,               
     switch (gewinner)                                                                                                               // Da bei meinem Code immmer Spieler1 die erste Karte legt, Spieler 2 die 2. etc.
     {                                                                                                                               // können die Karten in der Tischmitte anhand ihrer Position dem richtigen Ablagestapel zugeordnet werden
     case 0:
-        for (int i = 0; i < 3; i++) {
+        for (unsigned int i = 0; i < 3; i++) {
         ablagestapel_1.push_back(tischmitte[i]);
         };
         break;
     case 1:
-        for (int i = 0; i < 3; i++) {
+        for (unsigned int i = 0; i < 3; i++) {
         ablagestapel_2.push_back(tischmitte[i]);
         };
         break;
     case 2:
-        for (int i = 0; i < 3; i++) {
+        for (unsigned int i = 0; i < 3; i++) {
         ablagestapel_3.push_back(tischmitte[i]);
         };
         break;
     }
     tischmitte.clear(); //Die Tischmitte wird wieder geleert.
-    
     
 }
 
@@ -360,35 +351,35 @@ void punkte_auswerten(const std::vector<Spielkarte>& ablagestapel_1,            
     int punkte_spieler1 = 0, punkte_spieler2 = 0, punkte_spieler3 = 0;
 
     // Punkte berechnen
-    for (int i = 0; i < ablagestapel_1.size(); i++) { 
+    for (unsigned int i = 0; i < ablagestapel_1.size(); i++) { 
     punkte_spieler1 += ablagestapel_1[i].getAugen();    // Die Augen aller Karten im Ablagestapel werden aufaddiert    
     }
-    for (int i = 0; i < ablagestapel_2.size(); i++) {
+    for (unsigned int i = 0; i < ablagestapel_2.size(); i++) {
     punkte_spieler2 += ablagestapel_2[i].getAugen();
     }
-    for (int i = 0; i < ablagestapel_3.size(); i++) {
+    for (unsigned int i = 0; i < ablagestapel_3.size(); i++) {
     punkte_spieler3 += ablagestapel_3[i].getAugen();
     }
 
     //Der Gewinner des letzten Stichs bekommt den Skat dazu
     std::cout << "\n--- Der Skat geht an Spieler " << (gewinner + 1) << " ---\n";                                                   // Gewinner der letzten Runde und damit des Skats wird über Konsole ausgegeben
-    for (int i = 0; i < skat.size(); i++) {
+    for (unsigned int i = 0; i < skat.size(); i++) {
         std::cout << skat[i].toString() << endl;
     }
 
     // Skat-Punkte zum Gewinner hinzufügen
         if (gewinner == 0) {
-            for (int i = 0; i < skat.size(); i++){
+            for (unsigned int i = 0; i < skat.size(); i++){
                 punkte_spieler1 += skat[i].getAugen();
             }
         }
         if (gewinner == 1) {
-            for (int i = 0; i < skat.size(); i++){
+            for (unsigned int i = 0; i < skat.size(); i++){
                 punkte_spieler2 += skat[i].getAugen();
             }
         }  
         if (gewinner == 2) {
-            for (int i = 0; i < skat.size(); i++){
+            for (unsigned int i = 0; i < skat.size(); i++){
                 punkte_spieler3 += skat[i].getAugen();
             }
         }
@@ -455,4 +446,3 @@ int main ()                                                                     
 
     return 0;
 }
-

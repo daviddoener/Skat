@@ -1,0 +1,110 @@
+Test-Datei für Skatspiel von David Wahlbuhl
+
+Zum Compilieren des Quelltextes bitte diese Zeile ins Terminal kopieren:
+g++ -std=c++23 -Wall ./main.cpp -o ./skat  && ./skat
+Mit diesem Befehl bekommen sie deutlich weniger Warnungen
+
+Mögliche Nutzereingaben für Namen der Spieler:
+Martin
+apifubadpifub
+91824712987
+(hier sind unendlich viele Eingaben möglich da es sich um eine String-Datentyp handelt)
+
+Mögliche Nutzereingaben für das Wählen des Trumpfs:
+(keine Eingabe) --> Es wird weiter nach Nutzereingabe gefragt
+1
+2
+3
+4
+(bei anderen Eingaben wird das Programm beendet)
+
+Ab dem jetzigen Zeitpunkt kann das Programm bei jeder Eingabe durch die Eingabe
+1234321
+sofort beendet werden.
+
+Mögliche Nutzereingaben bei der Wahl der ersten Karte durch Spieler 1 in der ersten Runde:
+(keine Eingabe) --> Es wird weiter nach Nutzereingabe gefragt
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+(bei anderen Eingaben wird das Programm beendet)
+
+Mögliche Nutzereingaben bei der Wahl der ersten Karte durch Spieler 2 in der ersten Runde:
+(keine Eingabe) --> Es wird weiter nach Nutzereingabe gefragt
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+(bei anderen Eingaben wird das Programm beendet)
+
+Wird eine Karte gewählt die nach Skatregeln nicht gelegt werden darf so wird der Nutzer erneut aufgefordert und kann wieder folgende Eingaben machen:
+(keine Eingabe) --> Es wird weiter nach Nutzereingabe gefragt
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+(bei anderen Eingaben wird das Programm beendet)
+
+Mögliche Nutzereingaben bei der Wahl der ersten Karte durch Spieler 3 in der ersten Runde:
+(keine Eingabe) --> Es wird weiter nach Nutzereingabe gefragt
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+(bei anderen Eingaben wird das Programm beendet)
+
+Wird eine Karte gewählt die nach Skatregeln nicht gelegt werden darf, so wird der Nutzer erneut aufgefordert und kann wieder folgende Eingaben machen:
+(keine Eingabe) --> Es wird weiter nach Nutzereingabe gefragt
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+(bei anderen Eingaben wird das Programm beendet)
+Er wird solange aufgefordert bis
+
+In Runde zwei gelten die gleichen Regeln nur mit den Zahlen von 1 bis 9
+(keine Eingabe) --> Es wird weiter nach Nutzereingabe gefragt
+1
+2
+3
+4
+5
+6
+7
+8
+9
+(bei anderen Eingaben wird das Programm beendet)
+
+Mit jeder Runde veringert sich die Anzahl der möglichen Nutzereingaben um 1. (Die Optionen werden immer im Terminal angezeigt)
+
